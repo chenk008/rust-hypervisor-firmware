@@ -30,13 +30,20 @@ impl fmt::Write for Serial {
     }
 }
 
+// 将宏进行了导出
 #[macro_export]
+// 定义一个过程宏
 macro_rules! log {
+    // 外层$表示重复匹配，这里重复匹配没有分隔符
+    // 模式匹配tt，变量名是arg
     ($($arg:tt)*) => {{
         use core::fmt::Write;
+        // 条件编译，
         #[cfg(all(feature = "log-serial", not(test)))]
+        // 特殊宏变量 $crate，该宏被其他crate使用的时候，自动解析
         writeln!($crate::serial::Serial, $($arg)*).unwrap();
         #[cfg(all(feature = "log-serial", test))]
+        // $(...)* 中的代码会重复展开
         println!($($arg)*);
     }};
 }

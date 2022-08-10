@@ -21,6 +21,7 @@ pub enum Error {
     QueueTooSmall,
 }
 
+// 定义trait VirtioTransport （类似于接口）
 /// Trait to allow separation of transport from block driver
 pub trait VirtioTransport {
     fn init(&mut self, device_type: u32) -> Result<(), Error>;

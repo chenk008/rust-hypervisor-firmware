@@ -36,6 +36,8 @@ impl From<fat::Error> for Error {
 
 const KERNEL_LOCATION: u64 = 0x20_0000;
 
+// repr属性来指定类型的内存布局
+// repr (transparent) 用于仅包含一个成员变量的类型，该类型的内存布局与成员变量类型的内存布局完全一致。类型仅仅具备编译阶段的意义，在运行时，类型变量与其成员变量可以认为是一个相同变量，可以相互无障碍类型转换
 #[repr(transparent)]
 pub struct Kernel(Params);
 

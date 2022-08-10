@@ -14,6 +14,7 @@ panic = "abort"
 lto = "thin"
 
 [features]
+# 默认开启
 default = ["log-serial", "log-panic"]
 # Have the log! macro write to serial output. Disabling this significantly
 # reduces code size, but makes debugging essentially impossible

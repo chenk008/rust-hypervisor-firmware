@@ -36,6 +36,7 @@ impl PciConfig {
     const fn new() -> Self {
         // We use the legacy, port-based Configuration Access Mechanism (CAM).
         Self {
+            // 这两个地址是PCI配置空间的寄存器地址
             address_port: PortWriteOnly::new(0xcf8),
             data_port: PortReadOnly::new(0xcfc),
         }
@@ -62,6 +63,7 @@ impl PciConfig {
 }
 
 fn get_device_details(bus: u8, device: u8, func: u8) -> (u16, u16) {
+    // borrow_mut 返回 RefMut<T> 类型的智能指针
     let data = PCI_CONFIG.borrow_mut().read(bus, device, func, 0);
     ((data & 0xffff) as u16, (data >> 16) as u16)
 }
@@ -96,6 +98,7 @@ where
     }
 }
 
+// 设置trait default，类型中的包含的其他类型都实现了Default trait
 #[derive(Default)]
 pub struct PciDevice {
     bus: u8,
@@ -114,6 +117,7 @@ enum PciBarType {
     IoSpace,
 }
 
+// enum需要手动实现default
 impl Default for PciBarType {
     fn default() -> Self {
         PciBarType::Unused
@@ -132,6 +136,7 @@ impl PciDevice {
             bus,
             device,
             func,
+            // 使用default trait
             ..Default::default()
         }
     }
@@ -264,6 +269,7 @@ impl VirtioPciTransport {
 /// le64 queue_avail;               // 0x28 // read-write
 /// le64 queue_used;                // 0x30 // read-write
 
+// 实现trait
 impl VirtioTransport for VirtioPciTransport {
     fn init(&mut self, _device_type: u32) -> Result<(), VirtioError> {
         self.device.init();
